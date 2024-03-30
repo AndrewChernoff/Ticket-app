@@ -4,6 +4,7 @@ import { PriorityDisplay } from "./PriorityDisplay";
 import { ProgressDisplay } from "./ProgressDisplay";
 import { StatusDisplay } from "./StatusDisplay";
 import { TicketType } from "../api/ticket/route";
+import Link from "next/link";
 
 type Props = {
   id?: string;
@@ -33,12 +34,12 @@ export const TicketCard = ({ ticket }: Props) => {
       <div className="flex mb-3">
         <PriorityDisplay priority={ticket.priority} />
         <div className="ml-auto">
-          <DeleteBlock />
+          <DeleteBlock id={ticket._id} />
         </div>
       </div>
-      <h4>Ticket Title</h4>
+      <h4><Link href={`/ticket/${ticket._id}`}>{ticket.title}</Link></h4>
       <hr className="h-px border-0 bg-page mb-2" />
-      <p className="whitespace-pre-wrap">this is the ticket description</p>
+      <p className="whitespace-pre-wrap">{ticket.description}</p>
       <div className="flex-grow"></div>
       <div className="flex mt-2">
         <div className="flex flex-col">

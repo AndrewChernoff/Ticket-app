@@ -2,8 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import { TicketType } from "../api/ticket/route";
 
-export const TicketForm = () => {
+type Props = {
+  ticket?: TicketType;
+  editMode?: boolean;
+};
+
+export const TicketForm = ({ ticket, editMode }: Props) => {
   const router = useRouter();
 
   const startingTicketData = {
@@ -14,6 +20,15 @@ export const TicketForm = () => {
     progress: "",
     status: "",
   };
+
+  if (editMode && ticket) {
+    (startingTicketData.title = ticket?.title),
+      (startingTicketData.description = ticket?.title),
+      (startingTicketData.category = ticket?.category),
+      (startingTicketData.priority = ticket?.priority),
+      (startingTicketData.progress = String(ticket?.progress)),
+      (startingTicketData.status = ticket?.status);
+  }
 
   const [formData, setFormData] = useState(startingTicketData);
 
@@ -31,8 +46,8 @@ export const TicketForm = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log("submitted");
-    let res = await fetch("/api/ticket", {
+
+    const res = await fetch("/api/ticket", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +69,7 @@ export const TicketForm = () => {
         method="post"
         onSubmit={handleSubmit}
       >
-        <h3>Create Your Ticket</h3>
+        <h3>{editMode ? "Update" : "Create"} Your Ticket</h3>
         <label>Title</label>
         <input
           id="title"
@@ -150,7 +165,7 @@ export const TicketForm = () => {
           <option value="started">Started</option>
           <option value="done">Done</option>
         </select>
-        <button type="submit" /* className="btn" */>Create Ticket</button>
+        <button type="submit" /* className="btn" */>{editMode ? "Update" : "Create"} Ticket</button>
       </form>
     </div>
   );

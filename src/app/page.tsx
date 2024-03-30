@@ -1,25 +1,13 @@
+import { api } from "@/sevices/services";
 import { TicketCard } from "./(components)/TicketCard";
 import { TicketType } from "./api/ticket/route";
 
-const getTickets = async () => {
-  try {
-    const res = await fetch("http://localhost:3000/api/ticket", {
-      cache: "no-store",
-    });
-    return res.json();
-  } catch (error) {
-    alert((error as any).message);
-  }
-};
-
 const DashBoard = async () => {
-  const tickets: TicketType[] = await getTickets().then((res) => res);
-  console.log(tickets);
+  const tickets: TicketType[] = await api.getTickets().then((res) => res);
 
   const uniqueCategories = [
     ...new Set(tickets.map(({ category }) => category)),
   ];
-  console.log(uniqueCategories);
 
   return (
     <div className="p-5">
